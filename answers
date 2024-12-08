@@ -1,0 +1,41 @@
+#Εγκατάσταση της βιβλιοθήκης ppscore
+!pip install ppscore
+
+#Εισαγωγή των βιβλιοθηκών
+
+import pandas as pd
+import ppscore as pps
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Εισαγωγή του συνόλου δεδομένων
+url = 'https://raw.githubusercontent.com/kdemertzis/EKPA/main/Data/dga_domain.csv'
+df = pd.read_csv(url)
+
+# Αφαίρεση των κατηγορικών μεταβλητών
+df_numeric = df.select_dtypes(include=[np.number])
+
+# Υπολογισμός του πίνακα PPS
+pps_matrix = pps.matrix(df_numeric)
+
+# Οπτικοποίηση του πίνακα PPS
+plt.figure(figsize=(10, 8))
+sns.heatmap(pps_matrix.pivot(index='x', columns='y', values='ppscore'), 
+            cmap="viridis", annot=True, vmin=0, vmax=1)
+plt.title('PPS Matrix')
+plt.show()
+
+Συμπεράσματα
+Ο πίνακας PPS θα σας δείξει την προγνωστική ικανότητα κάθε μεταβλητής σε σχέση με τις άλλες. Με βάση την κλίμακα από 0 έως 1:
+
+Ένα PPS κοντά στο 0 υποδεικνύει ότι η μεταβλητή δεν έχει προγνωστική ισχύ για την πρόβλεψη της άλλης μεταβλητής.
+
+Ένα PPS κοντά στο 1 υποδεικνύει ισχυρή προγνωστική ικανότητα.
+
+Για να εφαρμόσουμε επιλογή χαρακτηριστικών, μπορούμε να 
+επιλέξουμε μεταβλητές με υψηλές τιμές PPS ως σημαντικές προγνωστικές μεταβλητές και να
+απορρίψουμε μεταβλητές με χαμηλές τιμές PPS, καθώς δεν συμβάλλουν σημαντικά στην πρόβλεψη.
+
+Αυτή η διαδικασία θα βελτιώσει την αποδοτικότητα των μοντέλων μηχανικής μάθησης, διατηρώντας μόνο τις πιο σημαντικές μεταβλητές.
+
